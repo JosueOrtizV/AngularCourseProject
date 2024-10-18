@@ -118,34 +118,37 @@ var controller = {
     },
     
     uploadImage: async function(req, res) {
-        const projectId = req.params.id;
-        const file_name = 'Imagen no subida...';
-        
+        var projectId = req.params.id;
+        var filename = "Imagen no subida...";
+    
         if (req.files) {
-            const file_path = req.files.image.path;
-            const file_split = file_path.split('\\');
-            const file_name = file_split[2];
-            const ext_split = file_name.split('\.');
-            const file_ext = ext_split[1];
-            
-            if (file_ext === 'png' || file_ext === 'jpg' || file_ext === 'jpeg' || file_ext === 'gif') {
-                try {
-                    const projectUpdated = await Project.findByIdAndUpdate(projectId, { image: file_name }, { new: true });
-                    if (!projectUpdated) return res.status(404).send({ message: "El proyecto no existe y no se ha asignado la imagen" });
-                    return res.status(200).send({ project: projectUpdated });
-                } catch (err) {
-                    return res.status(500).send({ message: "Error al subir la imagen" });
+            var filePath = req.files.image.path;
+            var fileSplit = filePath.split(path.sep);
+            var filename = fileSplit[fileSplit.length - 1];
+            var extSplit = filename.split('.');
+            var fileExt = extSplit[extSplit.length - 1].toLowerCase();
+    
+            if (fileExt === 'png' || fileExt === 'jpg' || fileExt === 'gif') {
+                const projectUpdated = await Project.findByIdAndUpdate(projectId, { image: filename }, { new: true });
+    
+                if (!projectUpdated) {
+                    return res.status(404).send({ message: "El proyecto no existe y no se ha asignado la imagen" });
                 }
+    
+                return res.status(200).send({ project: projectUpdated });
             } else {
-                fs.unlink(file_path, (err) => {
-                    if (err) return res.status(500).send({ message: "Extensión no válida y archivo no borrado" });
+                fs.unlink(filePath, (err) => {
+                    if (err) {
+                        console.log(err);
+                        return res.status(500).send({ message: "Error al eliminar el archivo no válido" });
+                    }
+                    return res.status(400).send({ message: "La extensión no es válida" });
                 });
-                return res.status(200).send({ message: "Extensión no válida" });
             }
         } else {
-            return res.status(200).send({ message: file_name });
+            return res.status(400).send({ message: filename });
         }
-    },
+    },    
     
     getImageFile: async function(req, res) {
         const file = req.params.image;
