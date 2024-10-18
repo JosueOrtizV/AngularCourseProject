@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const app = require('./functions/app');
+const app = require('./app');
 const port = process.env.PORT || 3700;
 
 mongoose.Promise = global.Promise;
