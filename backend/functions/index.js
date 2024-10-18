@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const app = require('.app'); // Asegúrate de que la ruta es correcta
+const app = require('./app'); // Asegúrate de que la ruta es correcta
 const port = process.env.PORT || 3700;
 
 // Cargar variables de entorno desde el archivo .env
