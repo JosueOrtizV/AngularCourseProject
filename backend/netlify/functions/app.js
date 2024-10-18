@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const serverless = require('serverless-http');
 const app = express();
-const project_routes = require('../routes/project');
+const project_routes = require('../../routes/project');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
