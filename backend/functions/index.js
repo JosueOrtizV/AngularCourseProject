@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const serverless = require('serverless-http');
 const app = require('./app'); // Asegúrate de que la ruta es correcta
 
 // Cargar variables de entorno desde el archivo .env
@@ -14,5 +15,4 @@ mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTop
 .catch(err => console.error('No se pudo conectar a MongoDB Atlas:', err));
 
 // Exportar la aplicación con serverless
-module.exports = app;
-module.exports.handler = require('serverless-http')(app);
+module.exports.handler = serverless(app);
