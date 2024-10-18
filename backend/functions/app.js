@@ -1,14 +1,10 @@
-'use strict'
+const express = require('express');
+const bodyParser = require('body-parser');
+const serverless = require('serverless-http');
+const app = express();
+const project_routes = require('../routes/project');
 
-var express = require('express');
-var bodyParser = require('body-parser');
-
-var app = express();
-
-//cargar archivos rutas
-var project_routes = require('./routes/project')
-//middlewares
-app.use(bodyParser.urlencoded({extended:false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // Configurar cabeceras y cors
@@ -20,9 +16,9 @@ app.use((req, res, next) => {
     next();
 });
 
-
-//rutas
+// Rutas
 app.use('/api', project_routes);
 
-//exportar
+// Exportar
 module.exports = app;
+module.exports.handler = serverless(app);
