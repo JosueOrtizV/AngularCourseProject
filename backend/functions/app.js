@@ -11,12 +11,6 @@ app.use(bodyParser.json());
 // Configurar cabeceras y cors
 app.use(cors());
 
-// Crear el directorio `uploads` si no existe
-const uploadDir = path.join(__dirname, '../uploads');
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir);
-}
-
 // Configurar carpeta estática
 app.use('/uploads', express.static(uploadDir));
 
