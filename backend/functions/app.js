@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 // Configurar cabeceras y cors
 app.use(cors());
 
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+
 // Rutas
 app.use('/api', project_routes);
 

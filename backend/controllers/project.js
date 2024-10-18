@@ -155,16 +155,17 @@ var controller = {
         }
     },
 
-    getImageFile: async function(req, res) {
+    getImageFile: async function(req,res) {
         var file = req.params.image;
-        var path_file = path.join(__dirname, '../uploads/', file);
-        fs.access(path_file, fs.constants.F_OK, (err) => {
-            if (!err) {
-                return res.sendFile(path.resolve(path_file));
-            } else {
-                return res.status(404).send({ message: "No existe la imagen" });
+        var path_file = './uploads/'+file;
+
+        fs.exists(path_file, (exists) => {
+            if (exists == true) {
+                return res.sendFile(path.resolve(path_file))
+            }else{
+                return res.status(200).send({message: "No existe la imagen"})
             }
-        });
+        })
     }
 
 }
