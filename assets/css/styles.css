@@ -37,12 +37,13 @@ header {
     background: rgba(53, 103, 164, 0.8);
     position: fixed;
     text-transform: uppercase;
-    padding: 0 10px;
+    padding: 15px 10px;
     box-sizing: border-box;
 }
 header ul {
     display: flex;
-    justify-content: space-around;
+    justify-content: center; /* Cambiado a center */
+    gap: 30px; /* Añadir gap */
     width: 100%;
     height: inherit;
     margin: 0;
@@ -74,17 +75,18 @@ header a:hover, .actived {
     color: black;
     transform: scale(1.50, 1.50);
 }
+
 /* Contenedor principal */
 #content {
     min-height: 600px;
-    height: auto;
     width: 75%;
-    margin: 0px auto;
-    box-shadow: 0px 0px 40px black;
+    margin: 0 auto;
+    box-shadow: 0 0 40px black;
     border-left: 1px solid #b7b7b7;
     border-right: 1px solid #b7b7b7;
     background: rgba(255, 255, 255, 0.7);
     padding-top: 120px;
+    overflow: hidden; /* Asegura que el contenido crezca */
 }
 
 /* Pie de pagina */
@@ -274,16 +276,20 @@ form input[disabled] {
     width: 100%;
 }
 
+
 /* Media Queries */
 @media (max-width: 1200px) {
     #content, footer {
         width: 90%;
     }
 }
-
 @media (max-width: 992px) {
     header ul {
         width: 60%;
+        gap: 20px; /* Reducir gap */
+    }
+    header a {
+        font-size: 18px; /* Reducir tamaño de fuente */
     }
     .container .image,
     .container .data {
@@ -302,24 +308,44 @@ form input[disabled] {
         width: 45%;
     }
 }
-
 @media (max-width: 768px) {
     header ul {
         width: 80%;
+        gap: 15px; /* Reducir gap */
+    }
+    header a {
+        font-size: 16px; /* Reducir tamaño de fuente */
     }
     .project {
         width: calc(50% - 20px);
         margin: 10px;
     }
 }
-
 @media (max-width: 576px) {
     header ul {
         width: 100%;
+        gap: 10px; /* Reducir gap */
+    }
+    header a {
+        font-size: 14px; /* Reducir tamaño de fuente */
     }
     .project {
         width: calc(100% - 20px);
         margin: 10px 0;
+    }
+}
+
+@media (max-width: 360px) {
+    header ul {
+        width: 100%;
+        gap: 5px; /* Reducir gap */
+    }
+    header a {
+        font-size: 13pxpx; /* Reducir tamaño de fuente */
+    }
+    .project {
+        width: calc(100% - 20px);
+        margin: 8px 0;
     }
 }
 
