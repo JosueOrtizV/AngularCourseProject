@@ -111,49 +111,52 @@ const controller = {
     uploadImage: async (req, res) => {
         const projectId = req.params.id;
         const imageFile = req.file;
-
+    
         if (imageFile) {
             const formData = new FormData();
             formData.append('image', imageFile.buffer, {
                 filename: imageFile.originalname
             });
-
+    
             try {
                 const fetch = (await import('node-fetch')).default; // Importación dinámica
-                const apiKey = 'tu-api-key-de-imgbb';
+                const apiKey = 'fc1b43db6180f3ee63777a0ff659697b'; // Asegúrate de que esta API Key sea válida
                 const url = `https://api.imgbb.com/1/upload?key=${apiKey}`;
-
+    
                 const response = await fetch(url, {
                     method: 'POST',
                     body: formData
                 });
-
+    
                 const responseData = await response.json();
-
+                console.log('Respuesta de Imgbb:', responseData); // Agrega un log aquí
+    
                 if (responseData.success) {
                     const imageUrl = responseData.data.url;
-
+    
                     const projectUpdated = await Project.findByIdAndUpdate(
                         projectId,
                         { image: imageUrl },
                         { new: true }
                     );
-
+    
                     if (!projectUpdated) {
                         return res.status(404).send({ message: "El proyecto no existe y no se ha asignado la imagen" });
                     }
-
+    
                     return res.status(200).send({ project: projectUpdated });
                 } else {
-                    return res.status(500).send({ message: "Error al subir la imagen a Imgbb" });
+                    console.error('Error en Imgbb:', responseData);
+                    return res.status(500).send({ message: "Error al subir la imagen a Imgbb", error: responseData });
                 }
             } catch (error) {
+                console.error('Error de solicitud a Imgbb:', error); // Log más detallado
                 return res.status(500).send({ message: "Error en la solicitud a Imgbb", error });
             }
         } else {
             return res.status(400).send({ message: "Imagen no subida" });
         }
-    },
+    },    
     getImageFile: async (req, res) => {
         const file = req.params.image;
         res.redirect(file);
