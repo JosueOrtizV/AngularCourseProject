@@ -3,10 +3,10 @@ import fs from 'fs';
 import Project from '../models/project.js';
 
 const controller = {
-    home: (req, res) => {
+    home: async function(req, res) {
         return res.status(200).send({ message: 'Soy la home' });
     },
-    test: (req, res) => {
+    test: async (req, res) => {
         return res.status(200).send({ message: 'Soy test' });
     },
     saveProject: async (req, res) => {
