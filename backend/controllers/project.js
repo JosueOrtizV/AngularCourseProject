@@ -4,6 +4,7 @@ const project = require('../models/project');
 var Project = require('../models/project')
 const path = require('path');
 const fs = require('fs');
+const fetch = require('node-fetch');
 
 var controller = {
     home: function(req,res){
@@ -118,19 +119,35 @@ var controller = {
     },
     
     uploadImage: async function(req, res) {
-        try {
-            var projectId = req.params.id;
-            var filename = "Imagen no subida...";
+        var projectId = req.params.id;
+        const imageFile = req.files.image;
     
-            if (req.files) {
-                var filePath = req.files.image.path;
-                var fileSplit = filePath.split(path.sep);
-                var filename = fileSplit[fileSplit.length - 1];
-                var extSplit = filename.split('.');
-                var fileExt = extSplit[extSplit.length - 1].toLowerCase();
+        if (imageFile) {
+            const filePath = imageFile.path;
+            const formData = new FormData();
+            formData.append('image', fs.readFileSync(filePath), {
+                filename: path.basename(filePath)
+            });
     
-                if (fileExt === 'png' || fileExt === 'jpg' || fileExt === 'gif') {
-                    const projectUpdated = await Project.findByIdAndUpdate(projectId, { image: filename }, { new: true });
+            try {
+                const apiKey = 'tu-api-key-de-imgbb';
+                const url = `https://api.imgbb.com/1/upload?key=${apiKey}`;
+    
+                const response = await fetch(url, {
+                    method: 'POST',
+                    body: formData
+                });
+    
+                const responseData = await response.json();
+    
+                if (responseData.success) {
+                    const imageUrl = responseData.data.url;
+    
+                    const projectUpdated = await Project.findByIdAndUpdate(
+                        projectId,
+                        { image: imageUrl },
+                        { new: true }
+                    );
     
                     if (!projectUpdated) {
                         return res.status(404).send({ message: "El proyecto no existe y no se ha asignado la imagen" });
@@ -138,33 +155,20 @@ var controller = {
     
                     return res.status(200).send({ project: projectUpdated });
                 } else {
-                    fs.unlink(filePath, (err) => {
-                        if (err) {
-                            console.log(err);
-                            return res.status(500).send({ message: "Error al eliminar el archivo no válido" });
-                        }
-                        return res.status(400).send({ message: "La extensión no es válida" });
-                    });
+                    return res.status(500).send({ message: "Error al subir la imagen a Imgbb" });
                 }
-            } else {
-                return res.status(400).send({ message: filename });
-            }  
-        } catch (error) {
-            console.log(error);
-            return res.status(500).send({ message: "La imagen no se ha subidoo" });
+            } catch (error) {
+                return res.status(500).send({ message: "Error en la solicitud a Imgbb", error });
+            }
+        } else {
+            return res.status(400).send({ message: "Imagen no subida" });
         }
     },
 
-    getImageFile: function(req, res) {
-        var file = req.params.image;
-        var path_file = path.join(__dirname, '../uploads', file);
-        fs.access(path_file, fs.constants.F_OK, (err) => {
-            if (!err) {
-                return res.sendFile(path.resolve(path_file));
-            } else {
-                return res.status(404).send({ message: "No existe la imagen" });
-            }
-        });
+    getImageFile: async function(req, res) {
+        const file = req.params.image;
+        // Aquí asumimos que `file` es la URL de la imagen almacenada en MongoDB
+        res.redirect(file);
     }
 
 }
