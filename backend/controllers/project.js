@@ -147,9 +147,9 @@ var controller = {
         }
     },
     
-    getImageFile: async function(req, res) {
-        const file = req.params.image;
-        const path_file = path.join(__dirname, '../uploads', file);
+    getImageFile: function(req, res) {
+        var file = req.params.image;
+        var path_file = path.join(__dirname, '../uploads', file);
         fs.access(path_file, fs.constants.F_OK, (err) => {
             if (!err) {
                 return res.sendFile(path.resolve(path_file));
@@ -157,7 +157,7 @@ var controller = {
                 return res.status(404).send({ message: "No existe la imagen" });
             }
         });
-    },
+    }
     
 }
 
