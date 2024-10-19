@@ -148,7 +148,7 @@ var controller = {
         } else {
             return res.status(400).send({ message: filename });
         }
-    },    
+    },
     
     getImageFile: async function(req, res) {
         const file = req.params.image;
