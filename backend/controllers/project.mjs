@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs';
-import Project from '../models/project.js';
+import Project from '../models/project.mjs';
 import FormData from 'form-data';
 
 const controller = {

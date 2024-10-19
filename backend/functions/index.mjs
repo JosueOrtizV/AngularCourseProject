@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import serverless from 'serverless-http';
-import app from './app.js';
+import app from './app.mjs';
 
 dotenv.config();
 
