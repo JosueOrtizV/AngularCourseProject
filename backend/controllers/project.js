@@ -1,47 +1,36 @@
-'use strict'
+import path from 'path';
+import fs from 'fs';
+import Project from '../models/project.js';
 
-const project = require('../models/project');
-var Project = require('../models/project')
-const path = require('path');
-const fs = require('fs');
-const fetch = require('node-fetch');
-
-var controller = {
-    home: function(req,res){
-        return res.status(200).send({
-            message: 'Soy la home'
-        });
+const controller = {
+    home: (req, res) => {
+        return res.status(200).send({ message: 'Soy la home' });
     },
-
-    test: function(req,res){
-        return res.status(200).send({
-            message: 'Soy test'
-        });
+    test: (req, res) => {
+        return res.status(200).send({ message: 'Soy test' });
     },
-
-    saveProject: async function(req, res) {
+    saveProject: async (req, res) => {
         try {
-            var project = new Project();
-    
-            var params = req.body;
+            const project = new Project();
+            const params = req.body;
             project.name = params.name;
             project.description = params.description;
             project.category = params.category;
             project.year = params.year;
             project.langs = params.langs;
             project.image = null;
-    
+
             const projectStored = await project.save();
-    
+
             if (!projectStored) {
                 return res.status(404).send({ message: 'No se ha podido guardar el proyecto' });
             }
-    
+
             return res.status(200).send({ project: projectStored });
         } catch (err) {
-            console.error(err); // Opcional: registrar el error para depuración
+            console.error(err);
             return res.status(500).send({ message: "Error al guardar" });
-        };
+        }
     },
 
     getProject: async function(req, res) {
@@ -118,42 +107,42 @@ var controller = {
         }
     },
     
-    uploadImage: async function(req, res) {
-        var projectId = req.params.id;
+    uploadImage: async (req, res) => {
+        const projectId = req.params.id;
         const imageFile = req.files.image;
-    
+
         if (imageFile) {
             const filePath = imageFile.path;
             const formData = new FormData();
             formData.append('image', fs.readFileSync(filePath), {
                 filename: path.basename(filePath)
             });
-    
+
             try {
-                const fetch = await import('node-fetch');
+                const fetch = (await import('node-fetch')).default; // Importación dinámica
                 const apiKey = 'fc1b43db6180f3ee63777a0ff659697b';
                 const url = `https://api.imgbb.com/1/upload?key=${apiKey}`;
-    
+
                 const response = await fetch(url, {
                     method: 'POST',
                     body: formData
                 });
-    
+
                 const responseData = await response.json();
-    
+
                 if (responseData.success) {
                     const imageUrl = responseData.data.url;
-    
+
                     const projectUpdated = await Project.findByIdAndUpdate(
                         projectId,
                         { image: imageUrl },
                         { new: true }
                     );
-    
+
                     if (!projectUpdated) {
                         return res.status(404).send({ message: "El proyecto no existe y no se ha asignado la imagen" });
                     }
-    
+
                     return res.status(200).send({ project: projectUpdated });
                 } else {
                     return res.status(500).send({ message: "Error al subir la imagen a Imgbb" });
@@ -165,13 +154,11 @@ var controller = {
             return res.status(400).send({ message: "Imagen no subida" });
         }
     },
-
-    getImageFile: async function(req, res) {
+    getImageFile: async (req, res) => {
         const file = req.params.image;
-        // Aquí asumimos que `file` es la URL de la imagen almacenada en MongoDB
         res.redirect(file);
-    }
+    },
+    // Otros métodos aquí...
+};
 
-}
-
-module.exports = controller;
+export default controller;

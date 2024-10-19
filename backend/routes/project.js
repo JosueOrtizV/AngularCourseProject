@@ -1,18 +1,10 @@
-'use strict'
+import express from 'express';
+import ProjectController from '../controllers/project.js';
+const router = express.Router();
+import multipart from 'connect-multiparty';
+const multipartMiddleware = multipart({ uploadDir: './uploads' });
 
-var express = require('express');
-var ProjectController = require('../controllers/project');
-
-var router = express.Router();
-
-var multipart = require('connect-multiparty');
-var multipartMiddleware = multipart({ uploadDir: './uploads' });
-
-router.get('/home', function(req, res, next) {
-    console.log('Request params:', req.params);
-    console.log('Request body:', req.body);
-    next();
-}, ProjectController.home);
+router.get('/home', ProjectController.home);
 router.post('/test', ProjectController.test);
 router.post('/save-project', ProjectController.saveProject);
 router.get('/project/:id?', ProjectController.getProject);
@@ -22,4 +14,4 @@ router.delete('/project/:id', ProjectController.deleteProject);
 router.post('/upload-image/:id', multipartMiddleware, ProjectController.uploadImage);
 router.get('/get-image/:image', ProjectController.getImageFile);
 
-module.exports = router;
+export default router;
