@@ -1,6 +1,7 @@
 import path from 'path';
 import fs from 'fs';
 import Project from '../models/project.js';
+import FormData from 'form-data';
 
 const controller = {
     home: (req, res) => {
@@ -109,18 +110,16 @@ const controller = {
     
     uploadImage: async (req, res) => {
         const projectId = req.params.id;
-        const imageFile = req.file;  // multer almacena el archivo en req.file
+        const imageFile = req.file;
 
         if (imageFile) {
             const filePath = imageFile.path;
             const formData = new FormData();
-            formData.append('image', fs.readFileSync(filePath), {
-                filename: path.basename(filePath)
-            });
+            formData.append('image', fs.createReadStream(filePath));
 
             try {
                 const fetch = (await import('node-fetch')).default; // Importación dinámica
-                const apiKey = 'fc1b43db6180f3ee63777a0ff659697b';
+                const apiKey = 'tu-api-key-de-imgbb';
                 const url = `https://api.imgbb.com/1/upload?key=${apiKey}`;
 
                 const response = await fetch(url, {
@@ -157,7 +156,8 @@ const controller = {
     getImageFile: async (req, res) => {
         const file = req.params.image;
         res.redirect(file);
-    }
+    },
+    // Otros métodos aquí...
 };
 
 export default controller;
