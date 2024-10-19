@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const serverless = require('serverless-http');
-const app = require('./app');
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import serverless from 'serverless-http';
+import app from './app.js';
 
 dotenv.config();
 
@@ -12,4 +12,5 @@ mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTop
 })
 .catch(err => console.error('No se pudo conectar a MongoDB Atlas:', err));
 
-module.exports.handler = serverless(app);
+const handler = serverless(app);
+export { handler };

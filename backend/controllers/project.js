@@ -131,7 +131,7 @@ var controller = {
     
             try {
                 const fetch = await import('node-fetch');
-                const apiKey = 'tu-api-key-de-imgbb';
+                const apiKey = 'fc1b43db6180f3ee63777a0ff659697b';
                 const url = `https://api.imgbb.com/1/upload?key=${apiKey}`;
     
                 const response = await fetch(url, {
