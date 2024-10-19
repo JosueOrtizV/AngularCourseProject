@@ -113,9 +113,10 @@ const controller = {
         const imageFile = req.file;
 
         if (imageFile) {
-            const filePath = imageFile.path;
             const formData = new FormData();
-            formData.append('image', fs.createReadStream(filePath));
+            formData.append('image', imageFile.buffer, {
+                filename: imageFile.originalname
+            });
 
             try {
                 const fetch = (await import('node-fetch')).default; // Importación dinámica
