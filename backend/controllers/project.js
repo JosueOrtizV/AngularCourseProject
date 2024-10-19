@@ -33,28 +33,28 @@ const controller = {
         }
     },
 
-    getProject: async function(req, res) {
+    getProject: async (req, res) => {
         try {
-            var projectId = req.params.id;
-    
+            const projectId = req.params.id;
+
             if (!projectId) {
                 return res.status(404).send({ message: "El proyecto no existe" });
             }
-    
+
             const project = await Project.findById(projectId);
-    
+
             if (!project) {
                 return res.status(404).send({ message: "El proyecto no existe" });
             }
-    
+
             return res.status(200).send({ project });
         } catch (err) {
-            console.error(err); // Opcional: registrar el error para depuración
+            console.error(err);
             return res.status(500).send({ message: "Error al devolver los datos" });
         }
     },
 
-    getProjects: async function (req, res) {
+    getProjects: async (req, res) => {
         try {
             const projects = await Project.find({}).sort('year');
     
@@ -69,7 +69,7 @@ const controller = {
         }
     },
 
-    updateProject: async function(req, res) {
+    updateProject: async (req, res) => {
         try {
             var projectId = req.params.id;
             var update = req.body;
@@ -91,7 +91,7 @@ const controller = {
         }
     },
 
-    deleteProject: async function(req, res) {
+    deleteProject: async (req, res) => {
         try {
             var projectId = req.params.id;
             const projectRemoved = await Project.findByIdAndDelete(projectId);
