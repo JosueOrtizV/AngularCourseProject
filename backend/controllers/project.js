@@ -109,7 +109,7 @@ const controller = {
     
     uploadImage: async (req, res) => {
         const projectId = req.params.id;
-        const imageFile = req.files.image;
+        const imageFile = req.file;  // multer almacena el archivo en req.file
 
         if (imageFile) {
             const filePath = imageFile.path;
@@ -157,7 +157,7 @@ const controller = {
     getImageFile: async (req, res) => {
         const file = req.params.image;
         res.redirect(file);
-    },
+    }
 };
 
 export default controller;
