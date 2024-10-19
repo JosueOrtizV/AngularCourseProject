@@ -3,10 +3,10 @@ import fs from 'fs';
 import Project from '../models/project.js';
 
 const controller = {
-    home: async function(req, res) {
+    home: (req, res) => {
         return res.status(200).send({ message: 'Soy la home' });
     },
-    test: async (req, res) => {
+    test: (req, res) => {
         return res.status(200).send({ message: 'Soy test' });
     },
     saveProject: async (req, res) => {
@@ -158,7 +158,6 @@ const controller = {
         const file = req.params.image;
         res.redirect(file);
     },
-    // Otros métodos aquí...
 };
 
 export default controller;
