@@ -8,7 +8,11 @@ var router = express.Router();
 var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart({ uploadDir: './uploads' });
 
-router.get('/home', ProjectController.home);
+router.get('/home', function(req, res, next) {
+    console.log('Request params:', req.params);
+    console.log('Request body:', req.body);
+    next();
+}, ProjectController.home);
 router.post('/test', ProjectController.test);
 router.post('/save-project', ProjectController.saveProject);
 router.get('/project/:id?', ProjectController.getProject);
