@@ -1,9 +1,8 @@
-'use strict'
+import mongoose from 'mongoose';
 
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+const { Schema } = mongoose;
 
-var ProjectSchema = Schema({
+const ProjectSchema = new Schema({
     name: String,
     description: String,
     category: String,
@@ -12,4 +11,5 @@ var ProjectSchema = Schema({
     image: String
 });
 
-module.exports = mongoose.model('Project', ProjectSchema);
+const Project = mongoose.model('Project', ProjectSchema);
+export default Project;
