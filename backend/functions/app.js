@@ -1,11 +1,11 @@
-const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const path = require('path');
-const fs = require('fs');
+import express from 'express';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import path from 'path';
+import fs from 'fs';
+import projectRoutes from '../routes/project.mjs';
+
 const app = express();
-const project_routes = require('../routes/project');
-const fetch = require('node-fetch');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
